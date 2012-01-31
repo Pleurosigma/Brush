@@ -62,7 +62,16 @@
 		Initialize the PhysicalGameObject
 		@method initialize
 	*/
-	PhysicalGameObject.prototype.initialize = function(){}
+	PhysicalGameObject.prototype.initialize = function(){}	
+	
+	/**
+		Attaches this PhysicalGameObject to the correct
+		data structures such as tickObjects and/or phyObjects.
+		Also adds this to BrushEvents if it should be done so.
+		This method is object specific and should be called
+		direction AFTER initilizing the object.
+	*/
+	PhysicalGameObject.prototype.attach = function(){}
 	
 	/**
 		Positions the AABoundingBox of this
@@ -105,7 +114,7 @@
 		for(var i = 0; i < l; i++){
 			var phyObject = PhysicalGameObject.phyObjects[i];
 			if(phyObject != this){
-				var rVector = this.aabb.checkForCollision(phyObject.aabb, true);
+				var rVector = this.getAABB().checkForCollision(phyObject.getAABB(), true);
 				if(rVector){
 					this.collide(phyObject, rVector)
 				}
@@ -124,6 +133,15 @@
 				form [dX, dY]
 	*/
 	PhysicalGameObject.prototype.collide = function(phyObject, rVector){}
+	
+	/**
+		Returns the AABB for this PhysicalGameObject
+		@method getAABB
+		@return {AABoundingBox} This objects AABB
+	*/
+	PhysicalGameObject.prototype.getAABB = function(){
+		return this.aabb;
+	}
 	
 	window.PhysicalGameObject = PhysicalGameObject;
 }(window));

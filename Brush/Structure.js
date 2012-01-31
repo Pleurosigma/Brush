@@ -1,4 +1,8 @@
 (function(window){
+	/**
+		A basic structure class. Designed to easily add
+		platforms or structures.
+	*/	
 	var Structure = function(){
 		this.initialize();
 	}
@@ -18,6 +22,9 @@
 	*/
 	Structure.prototype.displayObject = null;
 	
+	/**
+		The type of the PhysicalGameObject
+	*/
 	Structure.prototype.type = 'structure';
 	
 	// Used to avoid overriding parent initialize function

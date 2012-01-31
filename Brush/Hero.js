@@ -2,6 +2,39 @@
 	Hero by Logan Wilkerson
 */
 (function(window){
+	/**
+		Hero is a subclass of Actor that contains
+		some useful base code and logic for creating
+		a player characters. (Hero movements tend to be 
+		the most logical if they're made first and are
+		the first object in the phyObjects)
+		The hero is set up to be able to jump and land
+		on both boundaries and structures. If you decide
+		to extend the Hero class it will be useful to
+		override the following methods:
+		
+		initialize: To create your own hero you will
+		probably not want to use the parent initialize 
+		as is. You will want to make your own to set up
+		the aabb and DisplayObject. However, remember to
+		add this object to the phyObject and tickObject
+		arrays as well as to BrushEvent
+		
+		Delta Properties: You can change the numerous
+		Delta values to help your hero move slower or faster.
+		Note that collisions are glitchy at high speeds as
+		the AABoundingBox does not current preform sweeping
+		collisions.
+		
+		Collide: It might be useful to call Hero's collide first
+		before doing your own collide work. Collide handles both
+		Boundaries and Structures.
+		
+		onKey<Up, Down>: Currently uses Up, Left, and Right for
+		movement, but you can easily call the parent method and
+		then check for any other key.
+		
+	*/
 	var Hero = function(){
 		this.initialize();
 	}
@@ -9,6 +42,8 @@
 	Hero.prototype = new Actor();
 	
 	// Public Properties:
+	Hero.prototype.type = 'hero';
+	
 	Hero.prototype.leftHeld = false;
 	Hero.prototype.rightHeld = false;
 	Hero.prototype.jumpHit = false;
@@ -35,7 +70,6 @@
 	*/
 	Hero.prototype.initialize = function(){
 		this.Actor_initialize();
-		this.type = 'hero';
 		
 		this.aabb = new AABoundingBox(0,0, 10, 15);
 		
@@ -46,7 +80,13 @@
 		
 		this.positionDisplayObject(0,0);
 		this.positionAABB(10, 15);
-		
+	}
+	
+	/**
+		Overides PhysicalGameObject
+		attach method;
+	*/
+	Hero.prototype.attach = function(){	
 		BrushEvent.addListener('keyUp', this);
 		BrushEvent.addListener('keyDown', this);
 		
@@ -81,6 +121,11 @@
 		}
 		else{
 			this.dx = 0;
+		}		
+		if(this.curPlatform){
+			if(this.curPlatform.dx){
+				this.move(this.curPlatform.dx, 0);
+			}
 		}
 		
 		if(!this.inAir){
@@ -123,6 +168,7 @@
 			case 'boundary':
 			case 'structure':
 				console.log(rVector);
+				//Land on platform
 				if(rVector[1] < 0 && this.dy >= 0){
 					this.curPlatform = phyObject;
 				}

@@ -21,7 +21,7 @@
 	Boundary.prototype.initialize = function(stage, side){
 		var halfWidth = stage.canvas.width / 2;
 		var halfHeight = stage.canvas.height / 2;
-		var oobValue = 2;
+		var oobValue = 20;
 		switch(side){
 			case 'top':
 				this.aabb = new AABoundingBox(halfWidth, -oobValue, halfWidth, oobValue);
